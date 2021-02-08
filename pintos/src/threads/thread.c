@@ -376,6 +376,31 @@ thread_foreach(thread_action_func *func, void *aux)
     }
 }
 
+/*new function that returns status of thread with code of 1,2,3,or 4*/
+int 
+thread_get_status(struct thread *t)
+{
+  switch(t->status){
+    case THREAD_READY:
+      return 1;
+    case THREAD_RUNNING:
+      return 2;
+    case THREAD_BLOCKED:
+      return 3;
+    case THREAD_DYING:
+      return 4;
+    default:
+      return 0; /*error*/
+  }
+}
+
+int64_t
+thread_get_wakeup(struct thread *t)
+{
+  return t->wakeup_timer;
+}
+
+
 /* New function that sets current threads wakeup timer to new_wakeup*/
 void
 thread_set_wakeup_timer(int new_wakeup)
