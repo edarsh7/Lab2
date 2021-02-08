@@ -132,6 +132,9 @@ void thread_foreach(thread_action_func *, void *);
 int thread_get_priority(void);
 void thread_set_priority(int);
 
+/*added thread set wakeup to set the wakeup timer for a thread*/
+void thread_set_wakeup_timer(int);
+
 int thread_get_nice(void);
 void thread_set_nice(int);
 int thread_get_recent_cpu(void);

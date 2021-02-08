@@ -376,6 +376,13 @@ thread_foreach(thread_action_func *func, void *aux)
     }
 }
 
+/* New function that sets current threads wakeup timer to new_wakeup*/
+void
+thread_set_wakeup_timer(int new_wakeup)
+{
+  thread_current()->wakeup_timer = new_wakeup;
+}
+
 /* Sets the current thread's priority to NEW_PRIORITY. */
 void
 thread_set_priority(int new_priority)
