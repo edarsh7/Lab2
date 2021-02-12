@@ -278,6 +278,7 @@ thread_block(void)
 void
 thread_unblock(struct thread *t)
 {
+    printf("thread_unblock stuck");
     enum intr_level old_level;
 
     ASSERT(is_thread(t));
@@ -348,6 +349,7 @@ thread_exit(void)
 void
 thread_yield(void)
 {
+    printf("thread_yield stuck");
     struct thread *cur = thread_current();
     enum intr_level old_level;
 
@@ -661,6 +663,7 @@ uint32_t thread_stack_ofs = offsetof(struct thread, stack);
 static void
 ready_queue_insert(struct list *ready_q, struct list_elem *thread)
 {
+    printf("inst order stuck");
     struct list_elem *cur;
     struct thread *x = list_entry(thread,struct thread,elem);
     struct thread *y; 
