@@ -109,7 +109,8 @@ timer_sleep (int64_t ticks)
   /*code from lecture that puts thread to sleep*/
   intr_disable();
   thread_block();
-  intr_enable();  
+  intr_enable();
+  thread_yield();
 }
 
 /* 
@@ -295,7 +296,6 @@ timer_alarmclock (struct thread *t, void *aux)
   if( (thread_get_status(t) == 3) && (thread_get_wakeup(t) <= timer_ticks()) )
   {
     thread_unblock(t);
-    thread_yield();
   }
 }
 
