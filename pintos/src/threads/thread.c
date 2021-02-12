@@ -362,6 +362,7 @@ thread_yield(void)
     {
         //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
         list_insert_ordered(&ready_list, &cur->elem, &thread_prio_is_less, 0);
+        reorder(&ready_list, &cur->elem);
     }
 
     cur->status = THREAD_READY;
@@ -681,4 +682,12 @@ bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *a
     }
     
     return true;
+}
+
+
+static void
+reorder(struct list *rdy_q, struct list_elem * e)
+{
+    int x = list_entry(e, struct thread, elem)->priority;
+    printf("%d", x);
 }
