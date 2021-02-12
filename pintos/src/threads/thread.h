@@ -131,6 +131,10 @@ void thread_yield(void);
 typedef void thread_action_func(struct thread *t, void *aux);
 void thread_foreach(thread_action_func *, void *);
 
+/*new functions added to return convenient variables*/
+int thread_get_status(struct thread *t);
+int64_t thread_get_wakeup(struct thread *t);
+
 int thread_get_priority(void);
 void thread_set_priority(int);
 
@@ -141,5 +145,8 @@ int thread_get_nice(void);
 void thread_set_nice(int);
 int thread_get_recent_cpu(void);
 int thread_get_load_avg(void);
+
+static void
+ready_queue_insert(struct list *, struct list_elem *);
 
 #endif /* threads/thread.h */
