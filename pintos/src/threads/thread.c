@@ -285,8 +285,9 @@ thread_unblock(struct thread *t)
     old_level = intr_disable();
     ASSERT(t->status == THREAD_BLOCKED);
 
+    reorder(&ready_list, &t->elem);
     //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
-    list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
+    //list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
 
     t->status = THREAD_READY;
     intr_set_level(old_level);
@@ -361,7 +362,7 @@ thread_yield(void)
     if (cur != idle_thread)
     {
         //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
-        list_insert_ordered(&ready_list, &cur->elem, &thread_prio_is_less, 0);
+        //list_insert_ordered(&ready_list, &cur->elem, &thread_prio_is_less, 0);
         reorder(&ready_list, &cur->elem);
     }
 
@@ -686,8 +687,14 @@ bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *a
 
 
 static void
-reorder(struct list *rdy_q, struct list_elem * e)
+reorder(struct list *rdy_q, struct list_elem * td_to_inst)
 {
-    int x = list_entry(e, struct thread, elem)->priority;
-    printf("%d", x);
+    struct list_elem *iter_td;
+    for(iter_td = list_begin(rdy_q); iter_td != list_end(rdy_q); iter_td = list_next(elem))
+    {
+        if(list_entry(td_to_inst, struct thread, elem)->priority <= list_entry(iter_td, struct thread, elem)->priority )
+        {
+            list_insert(iter_td, td_to_inst);
+        }
+    }
 }
