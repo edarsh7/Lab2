@@ -674,10 +674,10 @@ uint32_t thread_stack_ofs = offsetof(struct thread, stack);
 bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *aux)
 { 
 
-    if(list_entry(td_1, struct thread, elem)->priority > list_entry(td_2, struct thread, elem)->priority)
+    if(list_entry(td_1, struct thread, elem)->priority <= list_entry(td_2, struct thread, elem)->priority)
     {
-        return true;
+        return false;
     }
     
-    return false;
+    return true;
 }
