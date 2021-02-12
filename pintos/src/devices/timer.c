@@ -297,6 +297,7 @@ timer_alarmclock (struct thread *t, void *aux)
   {
     thread_unblock(t);
   }
+  thread_yield();
 }
 
 /*The alarm clock that 1) checks if the thread is asleep and 2) checks if it is at or past its
