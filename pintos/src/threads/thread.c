@@ -687,15 +687,24 @@ bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *a
 
 
 static void
-reorder(struct list *rdy_q, struct list_elem * td_to_inst)
+reorder(struct list *rdy_q, struct list_elem * td_to_insert)
 {
-    struct list_elem *iter_td;
-    for(iter_td = list_begin(rdy_q); iter_td != list_end(rdy_q); iter_td = list_next(iter_td))
+    if(list_empty(rdy_q))
     {
-        if(list_entry(td_to_inst, struct thread, elem)->priority <= list_entry(iter_td, struct thread, elem)->priority )
+        list_push_back(rdy_q, td_to_insert)
+    }
+    else
+    {
+        struct list_elem *iter_td;
+        for(iter_td = list_begin(rdy_q); iter_td != list_end(rdy_q); iter_td = list_next(iter_td))
         {
-            list_insert(iter_td, td_to_inst);
-            break;
+            if(list_entry(td_to_insert, struct thread, elem)->priority <= list_entry(iter_td, struct thread, elem)->priority )
+            {
+                list_insert(iter_td, td_to_insert);
+                break;
+            }
         }
     }
+    
+    
 }
