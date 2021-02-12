@@ -207,7 +207,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
 
   /*using built in function to apply a alarm clock check to every thread*/
   thread_foreach(timer_alarmclock,0);
-
+  thread_yield()
 }
 
 /* 
@@ -297,7 +297,6 @@ timer_alarmclock (struct thread *t, void *aux)
   {
     thread_unblock(t);
   }
-  thread_yield();
 }
 
 /*The alarm clock that 1) checks if the thread is asleep and 2) checks if it is at or past its
