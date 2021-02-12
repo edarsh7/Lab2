@@ -240,7 +240,7 @@ thread_create(const char *name, int priority,
     sf->ebp = 0;
 
     intr_set_level(old_level);
-    printf("thfdjkhk");
+
     /* Add to run queue. */
     thread_unblock(t);
     thread_yield();
@@ -278,14 +278,13 @@ thread_block(void)
 void
 thread_unblock(struct thread *t)
 {
-    printf("thread_unblock stuck");
     enum intr_level old_level;
 
     ASSERT(is_thread(t));
 
     old_level = intr_disable();
     ASSERT(t->status == THREAD_BLOCKED);
-    ready_queue_insert(&ready_list, &t->elem);
+    list_insert_ordered (&ready_list, &t->elem, compare_priority, 0);
     t->status = THREAD_READY;
     intr_set_level(old_level);
 }
@@ -349,7 +348,6 @@ thread_exit(void)
 void
 thread_yield(void)
 {
-    printf("thread_yield stuck");
     struct thread *cur = thread_current();
     enum intr_level old_level;
 
@@ -357,7 +355,7 @@ thread_yield(void)
 
     old_level = intr_disable();
     if (cur != idle_thread)
-        ready_queue_insert(&ready_list, &cur->elem);
+        list_insert_ordered (&ready_list, &cur->elem, compare_priority, 0);
     cur->status = THREAD_READY;
     schedule();
     intr_set_level(old_level);
@@ -660,27 +658,11 @@ char *rguid = 0;
 uint32_t thread_stack_ofs = offsetof(struct thread, stack);
 
 
-static void
-ready_queue_insert(struct list *ready_q, struct list_elem *thread)
-{
-    printf("inst order stuck");
-    struct list_elem *cur;
-    struct thread *x = list_entry(thread,struct thread,elem);
-    struct thread *y; 
-    if(list_empty(ready_q))
-    {
-        list_push_back(ready_q, thread);
-    }
-    else
-    {   
-        for(cur = list_begin(ready_q); cur != list_end(ready_q); cur = list_next(cur))
-        {
-            y = list_entry(cur, struct thread, elem);
-            if(x->priority <= y->priority)
-            {
-                list_insert(cur, thread);
-                break;
-            }
-        }
-    }
+bool compare_priority(struct list_elem *l1, struct list_elem *l2,void *aux)
+{ 
+  struct thread *t1 = list_entry(l1,struct thread,elem);
+  struct thread *t2 = list_entry(l2,struct thread,elem);
+  if( t1->priority > t2->priority)
+    return true;
+  return false;
 }
