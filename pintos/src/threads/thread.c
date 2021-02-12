@@ -680,8 +680,5 @@ bool thread_prio_is_less(struct list_elem *x, struct list_elem *y, void *aux)
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
