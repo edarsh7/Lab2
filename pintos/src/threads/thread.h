@@ -147,5 +147,5 @@ int thread_get_recent_cpu(void);
 int thread_get_load_avg(void);
 
 bool thread_prio_is_less(struct list_elem *x , struct list_elem *y, void *aux);
-static void reorder(struct list *rdy_q, struct list_elem * e);
+
 #endif /* threads/thread.h */
