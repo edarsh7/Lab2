@@ -285,9 +285,9 @@ thread_unblock(struct thread *t)
     old_level = intr_disable();
     ASSERT(t->status == THREAD_BLOCKED);
 
-    reorder(&ready_list, &t->elem);
+    //reorder(&ready_list, &t->elem);
     //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
-    //list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
+    list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
 
     t->status = THREAD_READY;
     intr_set_level(old_level);
@@ -362,8 +362,8 @@ thread_yield(void)
     if (cur != idle_thread)
     {
         //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
-        //list_insert_ordered(&ready_list, &cur->elem, &thread_prio_is_less, 0);
-        reorder(&ready_list, &cur->elem);
+        list_insert_ordered(&ready_list, &cur->elem, &thread_prio_is_less, 0);
+        //reorder(&ready_list, &cur->elem);
     }
 
     cur->status = THREAD_READY;
