@@ -284,7 +284,10 @@ thread_unblock(struct thread *t)
 
     old_level = intr_disable();
     ASSERT(t->status == THREAD_BLOCKED);
-    list_insert_ordered (&ready_list, &t->elem, compare_priority, 0);
+    
+    //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
+    list_insert_ordered(&ready_list, &t->elem, thread_prio_is_less, 0);
+
     t->status = THREAD_READY;
     intr_set_level(old_level);
 }
@@ -354,8 +357,13 @@ thread_yield(void)
     ASSERT(!intr_context());
 
     old_level = intr_disable();
+    
     if (cur != idle_thread)
-        list_insert_ordered (&ready_list, &cur->elem, compare_priority, 0);
+    {
+        //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
+        list_insert_ordered(&ready_list, &cur->elem, thread_prio_is_less, NULL);
+    }
+
     cur->status = THREAD_READY;
     schedule();
     intr_set_level(old_level);
@@ -414,6 +422,7 @@ void
 thread_set_priority(int new_priority)
 {
     thread_current()->priority = new_priority;
+    thread_yield();
 }
 
 /* Returns the current thread's priority. */
@@ -658,11 +667,21 @@ char *rguid = 0;
 uint32_t thread_stack_ofs = offsetof(struct thread, stack);
 
 
-bool compare_priority(struct list_elem *l1, struct list_elem *l2,void *aux)
+
+
+
+// function created to be used with list_insert_ordered() to add thread in correct order to ready queue
+bool thread_prio_is_less(struct list_elem *x, struct list_elem *y, void *aux)
 { 
-  struct thread *t1 = list_entry(l1,struct thread,elem);
-  struct thread *t2 = list_entry(l2,struct thread,elem);
-  if( t1->priority > t2->priority)
-    return true;
-  return false;
+    struct thread *a_thread = list_entry(x, struct thread, elem);
+    struct thread *b_thread = list_entry(y, struct thread, elem);
+
+    if(b->priority < a->priority)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
