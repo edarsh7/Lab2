@@ -662,14 +662,12 @@ static void
 ready_queue_insert(struct list *ready_q, struct list_elem *thread)
 {
     struct list_elem *cur;
-    for(cur = list_begin(ready_q), cur != list_end(ready_q), cur = list_next(cur))
+    for(cur = list_begin(ready_q); cur != list_end(ready_q); cur = list_next(cur))
     {
-        if(list_entry(thread, struct thread, priority) <= list_entry(cur, struct thread, priority))
+        if(list_entry(thread, struct thread, elem) <= list_entry(cur, struct thread, elem))
         {
             list_insert(thread, cur);
             break;
         }
     }
-
-
 }
