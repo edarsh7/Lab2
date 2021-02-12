@@ -284,8 +284,7 @@ thread_unblock(struct thread *t)
 
     old_level = intr_disable();
     ASSERT(t->status == THREAD_BLOCKED);
-    
-    int x = list_entry(&ready_list, struct thread, elem);
+
     //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
     list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
 
