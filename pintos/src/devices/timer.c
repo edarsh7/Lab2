@@ -207,7 +207,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
 
   /*using built in function to apply a alarm clock check to every thread*/
   thread_foreach(timer_alarmclock,0);
-  thread_yield();
+
 }
 
 /* 
