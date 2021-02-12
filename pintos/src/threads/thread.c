@@ -690,14 +690,15 @@ static void
 reorder(struct list *rdy_q, struct list_elem * td_to_insert)
 {
 
-    
-        struct list_elem *iter_td;
-        for(iter_td = list_begin(rdy_q); iter_td != list_end(rdy_q); iter_td = list_next(iter_td))
+    struct list_elem *iter_td;
+    ASSERT (rdy_q != NULL);
+    ASSERT (td_to_insert != NULL);
+    for(iter_td = list_begin(rdy_q); iter_td != list_end(rdy_q); iter_td = list_next(iter_td))
+    {
+        if(list_entry(td_to_insert, struct thread, elem)->priority <= list_entry(iter_td, struct thread, elem)->priority )
         {
-            if(list_entry(td_to_insert, struct thread, elem)->priority <= list_entry(iter_td, struct thread, elem)->priority )
-            {
-                break;
-            }
+            break;
         }
-        return list_insert (iter_td, td_to_insert);
+    }
+    list_insert (iter_td, td_to_insert);
 }
