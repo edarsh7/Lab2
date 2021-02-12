@@ -30,6 +30,9 @@ static intr_handler_func timer_interrupt;
 static void real_time_delay (int64_t num, int32_t denom);
 static void real_time_sleep (int64_t num, int32_t denom);
 
+
+static void timer_alarmclock(struct thread *t, void *aux);
+
 /* 
  * Sets up the timer to interrupt TIMER_FREQ times per second,
  * and registers the corresponding interrupt. 
