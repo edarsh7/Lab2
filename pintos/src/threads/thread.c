@@ -284,7 +284,7 @@ thread_unblock(struct thread *t)
 
     old_level = intr_disable();
     ASSERT(t->status == THREAD_BLOCKED);
-    
+    printf("%d", list_entry(&ready_list, struct thread, elem));
     //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
     list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
 
@@ -672,7 +672,8 @@ uint32_t thread_stack_ofs = offsetof(struct thread, stack);
 
 // function created to be used with list_insert_ordered() to add thread in correct order to ready queue
 bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *aux)
-{ 
+{
+    
 
     if(list_entry(td_1, struct thread, elem)->priority <= list_entry(td_2, struct thread, elem)->priority)
     {
