@@ -288,7 +288,6 @@ thread_unblock(struct thread *t)
     //reorder(&ready_list, &t->elem);
     //using list.c function to add element to ready queue in correct order using "less" function thread_prio_is_less
     list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
-fldjf
     t->status = THREAD_READY;
     intr_set_level(old_level);
 }
