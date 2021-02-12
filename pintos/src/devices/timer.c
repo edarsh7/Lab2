@@ -297,6 +297,5 @@ timer_alarmclock(struct thread *t, void *aux)
   if( (thread_get_status(t) == 3) && (thread_get_wakeup(t) <= timer_ticks()) )
   {
     thread_unblock(t);
-    thread_yield();
   }
 }
