@@ -101,9 +101,13 @@ timer_sleep (int64_t ticks)
 {
   int64_t start = timer_ticks ();
 
-  ASSERT (intr_get_level () == INTR_ON);
-  while (timer_elapsed (start) < ticks) 
-    thread_yield ();
+  /*setting thread structure property of wakeup timer*/
+  thread_set_wakeup_timer(start + ticks);
+
+  /*code from lecture that puts thread to sleep*/
+  intr_disable();
+  thread_block();
+  intr_enable();  
 }
 
 /* 
@@ -198,6 +202,9 @@ timer_interrupt (struct intr_frame *args UNUSED)
 {
   ticks++;
   thread_tick ();
+
+  /*using built in function to apply a alarm clock check to every thread*/
+  thread_foreach(timer_alarmclock, 0);
 }
 
 /* 
@@ -277,4 +284,16 @@ real_time_delay (int64_t num, int32_t denom)
      the possibility of overflow. */
   ASSERT (denom % 1000 == 0);
   busy_wait (loops_per_tick * num / 1000 * TIMER_FREQ / (denom / 1000)); 
+}
+
+/*The alarm clock that 1) checks if the thread is asleep and 2) checks if it is at or past its
+wakeup time. If both these conditions are met, unblock the thread*/
+static void 
+timer_alarmclock(struct thread *t, void *aux)
+{
+  (void)aux;
+  if( (thread_get_status(t) == 3) && (thread_get_wakeup(t) <= timer_ticks()) )
+  {
+    thread_unblock(t);
+  }
 }
