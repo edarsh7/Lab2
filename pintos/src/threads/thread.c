@@ -675,7 +675,7 @@ bool thread_prio_is_less(struct list_elem *x, struct list_elem *y, void *aux)
 { 
 
 
-    if(list_entry(x, struct thread, elem)->priority > list_entry(y, struct thread, elem);->priority)
+    if(list_entry(x, struct thread, elem)->priority > list_entry(y, struct thread, elem)->priority)
     {
         return true;
     }
