@@ -243,6 +243,7 @@ thread_create(const char *name, int priority,
 
     /* Add to run queue. */
     thread_unblock(t);
+    thread_yield();
 
     return tid;
 }
@@ -289,7 +290,6 @@ thread_unblock(struct thread *t)
     list_insert_ordered(&ready_list, &t->elem, &thread_prio_is_less, 0);
     t->status = THREAD_READY;
     intr_set_level(old_level);
-    thread_yield();
 }
 
 /* Returns the name of the running thread. */
@@ -685,19 +685,3 @@ bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *a
 }
 
 
-static void
-reorder(struct list *rdy_q, struct list_elem * td_to_insert)
-{
-
-    struct list_elem *iter_td;
-    ASSERT (rdy_q != NULL);
-    ASSERT (td_to_insert != NULL);
-    for(iter_td = list_begin(rdy_q); iter_td != list_end(rdy_q); iter_td = list_next(iter_td))
-    {
-        if(list_entry(td_to_insert, struct thread, elem)->priority <= list_entry(iter_td, struct thread, elem)->priority )
-        {
-            break;
-        }
-    }
-    list_insert (iter_td, td_to_insert);
-}
