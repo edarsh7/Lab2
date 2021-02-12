@@ -691,7 +691,7 @@ reorder(struct list *rdy_q, struct list_elem * td_to_insert)
 {
     if(list_empty(rdy_q))
     {
-        list_push_back(rdy_q, td_to_insert);
+        list_insert (list_begin (rdy_q), td_to_insert);
     }
     else
     {
