@@ -285,6 +285,7 @@ thread_unblock(struct thread *t)
     old_level = intr_disable();
     ASSERT(t->status == THREAD_BLOCKED);
     ready_queue_insert(&ready_list, &t->elem);
+    list_push_back(&ready_list, &t->elem);
     t->status = THREAD_READY;
     intr_set_level(old_level);
 }
@@ -662,12 +663,14 @@ static void
 ready_queue_insert(struct list *ready_q, struct list_elem *thread)
 {
     struct list_elem *cur;
-    for(cur = list_begin(ready_q); cur != list_end(ready_q); cur = list_next(cur))
+    for(cur = list_begin(ready_q), cur != list_end(ready_q), cur = list_next(cur))
     {
-        if(list_entry(thread, struct thread, elem)->priority <= list_entry(cur, struct thread, elem)->priority)
+        if(thread->priority <= cur->priority)
         {
-            list_insert(thread, cur);
+            list_insert(cur, thread);
             break;
         }
     }
+
+
 }
