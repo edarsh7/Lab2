@@ -673,10 +673,11 @@ uint32_t thread_stack_ofs = offsetof(struct thread, stack);
 // function created to be used with list_insert_ordered() to add thread in correct order to ready queue
 bool thread_prio_is_less(struct list_elem *x, struct list_elem *y, void *aux)
 { 
+
     struct thread *a_thread = list_entry(x, struct thread, elem);
     struct thread *b_thread = list_entry(y, struct thread, elem);
 
-    if(b_thread->priority < a_thread->priority)
+    if(a_thread->priority > b_thread->priority)
     {
         return true;
     }
