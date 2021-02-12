@@ -695,6 +695,7 @@ reorder(struct list *rdy_q, struct list_elem * td_to_inst)
         if(list_entry(td_to_inst, struct thread, elem)->priority <= list_entry(iter_td, struct thread, elem)->priority )
         {
             list_insert(iter_td, td_to_inst);
+            break;
         }
     }
 }
