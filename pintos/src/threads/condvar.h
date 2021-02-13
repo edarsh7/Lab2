@@ -14,4 +14,6 @@ void condvar_wait(struct condvar *, struct lock *);
 void condvar_signal(struct condvar *, struct lock *);
 void condvar_broadcast(struct condvar *, struct lock *);
 
+bool compare_sema(struct list_elem *l1, struct list_elem *l2,void *aux);
+
 #endif /* UCSC CSE130 */

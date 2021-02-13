@@ -104,7 +104,7 @@ condvar_signal(struct condvar *cond, struct lock *lock UNUSED)
     ASSERT(lock != NULL);
     ASSERT(!intr_context());
     ASSERT(lock_held_by_current_thread(lock));
-    list_sort(&cond->waiters, thread_prio_is_less, 0);
+    list_sort(&cond->waiters, compare_sema, 0);
     if (!list_empty(&cond->waiters)) {
         semaphore_up(list_entry(list_pop_front(&cond->waiters), struct semaphore, elem));
     }
@@ -127,4 +127,15 @@ condvar_broadcast(struct condvar *cond, struct lock *lock)
     while (!list_empty(&cond->waiters)) {
         condvar_signal(cond, lock);
     }
+}
+
+bool compare_sema(struct list_elem *l1, struct list_elem *l2,void *aux)
+{
+  struct semaphore_elem *t1 = list_entry(l1,struct semaphore_elem,elem);
+  struct semaphore_elem *t2 = list_entry(l2,struct semaphore_elem,elem);
+  struct semaphore *s1=&t1->semaphore;
+  struct semaphore *s2=&t2->semaphore;
+  if( list_entry (list_front(&s1->waiters), struct thread, elem)->priority > list_entry (list_front(&s2->waiters),struct thread, elem)->priority)
+    return true;
+  return false;
 }
