@@ -126,4 +126,5 @@ semaphore_up(struct semaphore *semaphore)
     }
     semaphore->value++;
     intr_set_level(old_level);
+    thread_yield();
 }
