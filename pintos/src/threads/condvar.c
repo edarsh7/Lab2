@@ -104,7 +104,7 @@ condvar_signal(struct condvar *cond, struct lock *lock UNUSED)
     ASSERT(lock != NULL);
     ASSERT(!intr_context());
     ASSERT(lock_held_by_current_thread(lock));
-
+    list_sort(&cond->waiters, thread_prio_is_less, 0);
     if (!list_empty(&cond->waiters)) {
         semaphore_up(list_entry(list_pop_front(&cond->waiters), struct semaphore, elem));
     }
