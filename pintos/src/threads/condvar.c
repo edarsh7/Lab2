@@ -81,8 +81,8 @@ condvar_wait(struct condvar *cond, struct lock *lock)
 
     struct semaphore waiter;
     semaphore_init(&waiter, 0);
-    //list_push_back(&cond->waiters, &waiter.elem);
-    list_insert_ordered(&cond->waiters, &waiter.elem, thread_prio_is_less, 0);
+    list_push_back(&cond->waiters, &waiter.elem);
+    //list_insert_ordered(&cond->waiters, &waiter.elem, thread_prio_is_less, 0);
     lock_release(lock);
     semaphore_down(&waiter);
     lock_acquire(lock);
