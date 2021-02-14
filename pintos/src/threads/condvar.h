@@ -14,6 +14,6 @@ void condvar_wait(struct condvar *, struct lock *);
 void condvar_signal(struct condvar *, struct lock *);
 void condvar_broadcast(struct condvar *, struct lock *);
 
-bool compare_sema(struct list_elem *l1, struct list_elem *l2,void *aux);
+bool sema_td_prio(struct list_elem *, struct list_elem *, void *aux);
 
 #endif /* UCSC CSE130 */
