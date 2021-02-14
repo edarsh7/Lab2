@@ -81,8 +81,8 @@ condvar_wait(struct condvar *cond, struct lock *lock)
 
     struct semaphore waiter;
     semaphore_init(&waiter, 0);
-    list_push_back(&cond->waiters, &waiter.elem);
-    //list_insert_ordered(&cond->waiters, &waiter.elem, thread_prio_is_less, 0);
+    //list_push_back(&cond->waiters, &waiter.elem);
+    list_insert_ordered(&cond->waiters, $waiter.elem, sema_td_prio, 0);
     lock_release(lock);
     semaphore_down(&waiter);
     lock_acquire(lock);
@@ -129,3 +129,18 @@ condvar_broadcast(struct condvar *cond, struct lock *lock)
     }
 }
 
+// function created to be used with list_insert_ordered() to add thread in correct order to ready queue
+bool sema_td_prio(struct list_elem *sema_1, struct list_elem *sema_2, void *aux)
+{
+    (void*)aux;
+
+    struct semaphore *s_1 = list_entry(sema_1, struct semaphore, elem);
+    struct semaphore *s_2 = list_entry(sema_2, struct semaphore, elem);
+
+    if(list_front(s_1->waiters)->priority < list_front(s_2->waiters)->priority)
+    {
+        return false;
+    }
+    
+    return true;
+}
