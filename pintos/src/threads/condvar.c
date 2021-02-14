@@ -137,7 +137,7 @@ bool sema_td_prio(struct list_elem *sema_1, struct list_elem *sema_2, void *aux)
     struct semaphore *s_1 = list_entry(sema_1, struct semaphore, elem);
     struct semaphore *s_2 = list_entry(sema_2, struct semaphore, elem);
 
-    if(list_front(&s_1->waiters)->priority < list_front(&s_2->waiters)->priority)
+    if(list_entry(list_front(&s_1->waiters), struct thread, elem)->priority  < list_entry(list_front(&s_2->waiters), struct thread, elem)->priority)
     {
         return false;
     }
