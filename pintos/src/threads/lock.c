@@ -80,14 +80,15 @@ lock_acquire(struct lock *lock)
     ASSERT(!intr_context());
     ASSERT(!lock_held_by_current_thread(lock));
 
-    /*if(lock->holder != NULL)
+    if(lock->holder != NULL)
     {
         if(lock->holder->priority < thread_current()->priority)
         {
-            lock->holder->pre_dono_prio = lock->holder->priority;
+            lock->holder->pre_dono_prio[lock->holder->current_dono] = lock->holder->priority;
+            lock->holder->current_dono++;
             lock->holder->priority = thread_current()->priority;
         }
-    }*/
+    }
 
     semaphore_down(&lock->semaphore);
     lock->holder = thread_current();
@@ -127,7 +128,8 @@ lock_release(struct lock *lock)
     ASSERT(lock != NULL);
     ASSERT(lock_held_by_current_thread(lock));
 
-    //lock->holder->priority = lock->holder->pre_dono_prio;
+    lock->holder->priority = lock->holder->pre_dono_prio[0];
+    lock->holder->current_dono = 0;
     lock->holder = NULL;
     semaphore_up(&lock->semaphore);
 }

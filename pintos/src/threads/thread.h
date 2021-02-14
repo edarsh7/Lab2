@@ -91,7 +91,8 @@ struct thread {
 
     uint64_t wakeup_timer;
 
-    int pre_dono_prio;
+    int pre_dono_prio[4];
+    int current_dono;
 
     /* Shared between thread.c and sempahore.c. */
     struct list_elem elem; /* List element. */
