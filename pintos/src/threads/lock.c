@@ -86,7 +86,7 @@ lock_acquire(struct lock *lock)
     if(lock->holder && current_td->priority > lock->holder->priority)
     {
         lock->holder->priority = current_td->priority;
-        lock->holder->recieved = TRUE;
+        lock->holder->recieved = true;
     }
     
 
@@ -128,9 +128,10 @@ lock_release(struct lock *lock)
     ASSERT(lock != NULL);
     ASSERT(lock_held_by_current_thread(lock));
     
-    if(lock->holder->recieved == TRUE)
+    if(lock->holder->recieved == true)
     {
         lock->holder->priority = lock->holder->original;
+        lock->holder->recieved == false;
     }
 
     lock->holder = NULL;
