@@ -91,10 +91,6 @@ struct thread {
     struct list_elem allelem; /* List element for all threads list. */
 
     uint64_t wakeup_timer;
-    
-   
-    int original;
-    int recieved;
 
     /* Shared between thread.c and sempahore.c. */
     struct list_elem elem; /* List element. */
@@ -152,6 +148,5 @@ int thread_get_recent_cpu(void);
 int thread_get_load_avg(void);
 
 bool thread_prio_is_less(struct list_elem *x , struct list_elem *y, void *aux);
-void list_prio_sort();
 
 #endif /* threads/thread.h */
