@@ -87,12 +87,14 @@ struct thread {
     char name[16]; /* Name (for debugging purposes). */
     uint8_t *stack; /* Saved stack pointer. */
     int priority; /* Priority. */
+   
     struct list_elem allelem; /* List element for all threads list. */
 
     uint64_t wakeup_timer;
-
-    int pre_dono_prio[4];
-    int current_dono;
+    
+   
+    int original;
+    int recieved;
 
     /* Shared between thread.c and sempahore.c. */
     struct list_elem elem; /* List element. */

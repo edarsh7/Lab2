@@ -239,6 +239,8 @@ thread_create(const char *name, int priority,
     sf->eip = switch_entry;
     sf->ebp = 0;
 
+
+
     intr_set_level(old_level);
 
     /* Add to run queue. */
@@ -547,7 +549,8 @@ init_thread(struct thread *t, const char *name, int priority)
     strlcpy(t->name, name, sizeof t->name);
     t->stack = (uint8_t *) t + PGSIZE;
     t->priority = priority;
-    t->current_dono = 0;
+    t->original = priority;
+    t->recieved = FALSE;
     t->magic = THREAD_MAGIC;
     list_push_back(&all_list, &t->allelem);
 }
@@ -687,5 +690,6 @@ bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *a
     
     return true;
 }
+
 
 

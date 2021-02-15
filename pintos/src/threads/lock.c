@@ -73,6 +73,7 @@ lock_init(struct lock *lock)
  * interrupts disabled, but interrupts will be turned back on if
  * we need to sleep. 
  */
+
 void
 lock_acquire(struct lock *lock)
 {
@@ -80,15 +81,14 @@ lock_acquire(struct lock *lock)
     ASSERT(!intr_context());
     ASSERT(!lock_held_by_current_thread(lock));
 
-    if(lock->holder != NULL)
+    struct thread * current_td = thread_current();
+    
+    if(lock->holder && current_td->priority > lock->holder->priority)
     {
-        if(lock->holder->priority < thread_current()->priority)
-        {
-            lock->holder->pre_dono_prio[lock->holder->current_dono] = lock->holder->priority;
-            lock->holder->current_dono++;
-            lock->holder->priority = thread_current()->priority;
-        }
+        lock->holder->priority = current_td->priority;
+        lock->holder->recieved = TRUE;
     }
+    
 
     semaphore_down(&lock->semaphore);
     lock->holder = thread_current();
@@ -127,9 +127,12 @@ lock_release(struct lock *lock)
 {
     ASSERT(lock != NULL);
     ASSERT(lock_held_by_current_thread(lock));
+    
+    if(lock->holder->recieved == TRUE)
+    {
+        lock->holder->priority = lock->holder->original;
+    }
 
-    lock->holder->priority = lock->holder->pre_dono_prio[0];
-    lock->holder->current_dono = 0;
     lock->holder = NULL;
     semaphore_up(&lock->semaphore);
 }
