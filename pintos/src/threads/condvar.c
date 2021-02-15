@@ -106,7 +106,7 @@ condvar_signal(struct condvar *cond, struct lock *lock UNUSED)
 
     if (!list_empty(&cond->waiters)) 
     {
-        list_sort(&cond->waiters, sema_td_prio, 0);
+        list_sort(&cond->waiters, &sema_td_prio, 0);
         semaphore_up(list_entry(list_pop_front(&cond->waiters), struct semaphore, elem));
     }
 }
