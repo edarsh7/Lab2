@@ -74,6 +74,7 @@ semaphore_down(struct semaphore *sema)
     enum intr_level old_level = intr_disable();
     while (sema->value == 0) {
         //list_push_back(&sema->waiters, &thread_current()->elem);
+        //Using list_insert_ordered to order the threads in correspondence to a high priority queue
         list_insert_ordered(&sema->waiters, &thread_current()->elem, thread_prio_is_less, 0);
         thread_block();
     }

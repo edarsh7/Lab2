@@ -130,7 +130,9 @@ condvar_broadcast(struct condvar *cond, struct lock *lock)
     }
 }
 
-// function created to be used with list_insert_ordered() to add thread in correct order to ready queue
+
+
+// function that is used to compare the priorities of the front 2 threads of 2 different semaphores
 bool sema_td_prio(struct list_elem *sema_1, struct list_elem *sema_2, void *aux)
 {
     (void*)aux;
