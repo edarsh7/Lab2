@@ -691,5 +691,9 @@ bool thread_prio_is_less(struct list_elem *td_1, struct list_elem *td_2, void *a
     return true;
 }
 
+void list_prio_sort()
+{
+    list_sort(&ready_list, thread_prio_is_less);
+}
 
 

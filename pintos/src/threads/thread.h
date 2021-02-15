@@ -152,5 +152,6 @@ int thread_get_recent_cpu(void);
 int thread_get_load_avg(void);
 
 bool thread_prio_is_less(struct list_elem *x , struct list_elem *y, void *aux);
+void list_prio_sort();
 
 #endif /* threads/thread.h */

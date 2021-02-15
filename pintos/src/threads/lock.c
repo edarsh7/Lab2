@@ -132,6 +132,7 @@ lock_release(struct lock *lock)
     {
         lock->holder->priority = lock->holder->original;
         lock->holder->recieved == false;
+        list_prio_sort();
     }
 
     lock->holder = NULL;
